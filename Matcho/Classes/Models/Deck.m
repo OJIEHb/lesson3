@@ -12,6 +12,8 @@
 
 @property (nonatomic, strong) NSMutableArray *cards;
 
+@property (nonatomic) NSInteger countCardsFlipp;
+
 @end
 
 
@@ -20,6 +22,7 @@
 - (NSMutableArray *)cards {
 	if (!_cards) {
 		_cards = [[NSMutableArray alloc] init];
+        _countCardsFlipp = 0;
 	}
 	return _cards;
 }
@@ -29,6 +32,9 @@
 	[self addCard:card atTop:NO];
 }
 
+- (NSInteger)getCountFlippedCards{
+    return _countCardsFlipp;
+}
 
 - (void)addCard:(Card *)card atTop:(BOOL)atTop {
 	if (atTop) {
@@ -39,8 +45,14 @@
 }
 
 - (Card *)drawRandomCard {
-	NSInteger randomCard = arc4random() % [self.cards count];
-	return self.cards[randomCard];
+    if (self.cards.count > 0 ){
+        NSInteger randomCardIndex = arc4random() % [self.cards count];
+        Card *randomCard = self.cards[randomCardIndex];
+        _countCardsFlipp ++;
+        [self.cards removeObjectAtIndex:randomCardIndex];
+        return randomCard;
+    }
+    return nil;
 }
 
 @end
