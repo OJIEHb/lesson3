@@ -31,6 +31,7 @@
 	if (self) {
 		self.suit = suit;
 		self.rank = rank;
+        self.color = ([self.suit isEqual:@"♥"] || [self.suit isEqual:@"♦"]) ? [UIColor redColor] : [UIColor blackColor];
 	}
 	return self;
 }
@@ -58,8 +59,10 @@
 -(int) match:(NSArray *)otherCards {
     NSInteger score = 0;
     for(PlayingCard *card in otherCards){
-        if([card class] == [Card class]){
-            score += 10;
+        if([card isMemberOfClass:[Card class]]) {
+            if([self.contents isEqualToString:card.contents]){
+                score += 10;
+            }
         }
         else{
             if ([self.suit isEqualToString:card.suit]) {
@@ -73,5 +76,8 @@
 	return score;
 }
 
+- (NSString *)description{
+    return [NSString stringWithFormat:@"Drawed playing card %@",[self contents]];
+}
 
 @end

@@ -29,7 +29,7 @@
 
 
 - (void)addCard:(Card *)card {
-	[self addCard:card atTop:NO];
+    [self addCard:card atTop:NO];
 }
 
 - (NSInteger)getCountFlippedCards{

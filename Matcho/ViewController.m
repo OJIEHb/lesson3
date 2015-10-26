@@ -44,13 +44,9 @@
     else{
         _currentCard = [self.deck drawRandomCard];
         if(_currentCard){
-            if (([_currentCard class] == [Card class])){
-                NSLog(@"Drawed card 666");
-            }
-            else{
-                NSLog(@"Drawed playing card %@", _currentCard.contents);
-            }
-        }else{
+            NSLog(@"%@",_currentCard);
+        }
+        else{
             NSLog(@"Deck is empty");
         }
     }
@@ -60,22 +56,13 @@
 	if ([sender.currentTitle length]) {
 		[sender setTitle:@"" forState:UIControlStateNormal];
 		[sender setBackgroundImage:[UIImage imageNamed:@"cardback"] forState:UIControlStateNormal];
-	} else {
+	}
+    else {
         if(_currentCard){
             self.countFlipCards.text = [NSString stringWithFormat:@"%li", (long)[self.deck getCountFlippedCards]];
             [sender setTitle:_currentCard.contents forState:UIControlStateNormal];
             [sender setBackgroundImage:[UIImage imageNamed:@"cardfront"]forState:UIControlStateNormal];
-            if (([_currentCard class] == [Card class])){
-                [sender setTitleColor: [UIColor grayColor]forState:UIControlStateNormal];
-            }
-            else{
-                if ([_currentCard.contents hasSuffix:@"♦"] || [_currentCard.contents hasSuffix:@"♥"]) {
-                    [sender setTitleColor: [UIColor redColor]forState:UIControlStateNormal];
-                }
-                else{
-                    [sender setTitleColor: [UIColor blackColor]forState:UIControlStateNormal];
-                }
-            }
+            [sender setTitleColor:_currentCard.color forState:UIControlStateNormal];
         }
     }
 }

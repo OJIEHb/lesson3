@@ -14,7 +14,9 @@
 
 @implementation Card
 
+
 - (int)match:(NSArray *)otherCards {
+
     int score = 0;
 	
     for (Card *card in otherCards) {
@@ -24,6 +26,10 @@
     }
     
     return score;
+}
+
+- (NSString *)description{
+    return [NSString stringWithFormat:@"Drawed card %@",[self contents]];
 }
 
 @end
