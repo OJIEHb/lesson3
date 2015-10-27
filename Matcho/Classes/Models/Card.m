@@ -14,7 +14,6 @@
 
 @implementation Card
 
-
 - (int)match:(NSArray *)otherCards {
 
     int score = 0;
@@ -26,6 +25,10 @@
     }
     
     return score;
+}
+
+-(UIColor *)color{
+    return [UIColor grayColor];
 }
 
 - (NSString *)description{

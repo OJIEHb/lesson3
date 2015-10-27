@@ -17,7 +17,7 @@
 
 @property (nonatomic, getter = isMatched) BOOL matched;
 
-@property (nonatomic, strong) UIColor *color ;
+@property (nonatomic, strong, readonly) UIColor *color ;
 
 - (int)match:(NSArray *)otherCards;
 

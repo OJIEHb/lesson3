@@ -15,7 +15,6 @@
 - (void)addCard:(Card *)card atTop:(BOOL)atTop;
 - (void)addCard:(Card *)card;
 - (NSInteger)getCountFlippedCards;
-
 - (Card *)drawRandomCard;
 
 @end

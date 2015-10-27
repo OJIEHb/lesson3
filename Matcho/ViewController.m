@@ -12,13 +12,15 @@
 
 @interface ViewController ()
 
+@property (nonatomic) NSInteger pair;
+@property (nonatomic) NSInteger score;
 @property (nonatomic, strong) PlayingCardDeck *deck;
-
-@property (weak, nonatomic) IBOutlet UILabel *countFlipCards;
-
-@property (weak, nonatomic) IBOutlet UIButton *cardButton;
-
 @property (nonatomic, strong) Card *currentCard;
+@property (nonatomic, strong) NSMutableArray *chosenCard;
+@property (weak, nonatomic) IBOutlet UILabel *endGame;
+@property (weak, nonatomic) IBOutlet UILabel *countFlippedCards;
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (nonatomic, strong) IBOutletCollection(UIButton) NSMutableArray *cardButtons;
 
 @end
 
@@ -26,13 +28,9 @@
 
 - (PlayingCardDeck *)deck {
 	if (!_deck) {
+        _score = 0;
 		_deck = [[PlayingCardDeck alloc] init];
-        Card *card1 = [[Card alloc]init];
-        Card *card2 = [[Card alloc]init];
-        card1.contents = @"10♥";
-        card1.contents = @"15♦";
-        [_deck addCard:card1];
-        [_deck addCard:card2];
+        _chosenCard = [[NSMutableArray alloc]init];
 	}
 	return _deck;
 }
@@ -48,22 +46,51 @@
         }
         else{
             NSLog(@"Deck is empty");
+            self.endGame.text = [NSString stringWithFormat:@"Game over"];
         }
     }
 }
 
 - (IBAction)cardButtonTapped:(UIButton *)sender {
+    
+    if([_chosenCard count] > 1){
+        [_chosenCard removeAllObjects];
+        for(UIButton *button in _cardButtons){
+            if([button.currentTitle length] && button.enabled){
+                [button setTitle:@"" forState:UIControlStateNormal];
+                [button setBackgroundImage:[UIImage imageNamed:@"cardback"] forState:UIControlStateNormal];
+                NSLog(@"Card flipped %d", button.tag);
+            }
+        }
+    }
 	if ([sender.currentTitle length]) {
 		[sender setTitle:@"" forState:UIControlStateNormal];
 		[sender setBackgroundImage:[UIImage imageNamed:@"cardback"] forState:UIControlStateNormal];
 	}
     else {
         if(_currentCard){
-            self.countFlipCards.text = [NSString stringWithFormat:@"%li", (long)[self.deck getCountFlippedCards]];
+            self.countFlippedCards.text = [NSString stringWithFormat:@"Count flipped cards : %li", (long)[self.deck getCountFlippedCards]];
             [sender setTitle:_currentCard.contents forState:UIControlStateNormal];
             [sender setBackgroundImage:[UIImage imageNamed:@"cardfront"]forState:UIControlStateNormal];
             [sender setTitleColor:_currentCard.color forState:UIControlStateNormal];
         }
+    }
+    if ([_chosenCard count] > 0){
+        _score += [_currentCard match:_chosenCard];
+        self.scoreLabel.text = [NSString stringWithFormat:@"Score : %li", (long)_score];
+        if([_currentCard match:_chosenCard] > 0){
+            for(UIButton *button in _cardButtons){
+                if([button.currentTitle length]){
+                    button.enabled = NO;
+                    NSLog(@"Card disabled %d",button.tag);
+                }
+            }
+            _pair++;
+            if(_pair == 8){self.endGame.text = [NSString stringWithFormat:@"You win"];}
+        }
+    }
+    if(_currentCard){
+        [_chosenCard addObject:_currentCard];
     }
 }
 

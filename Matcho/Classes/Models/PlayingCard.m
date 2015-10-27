@@ -10,9 +10,13 @@
 
 @interface PlayingCard()
 
+@property (nonatomic, strong, readwrite) UIColor *color ;
+
 @end
 
 @implementation PlayingCard
+
+@synthesize color;
 
 + (NSArray *)suits {
     return @[@"♣", @"♠", @"♦", @"♥"];
@@ -60,16 +64,20 @@
     NSInteger score = 0;
     for(PlayingCard *card in otherCards){
         if([card isMemberOfClass:[Card class]]) {
+            score += [super match:@[card]];
+        }
+        else{
             if([self.contents isEqualToString:card.contents]){
                 score += 10;
             }
-        }
-        else{
-            if ([self.suit isEqualToString:card.suit]) {
-                score += 1;
-            }
-            if (self.rank == card.rank) {
-                score += 4;
+            else{
+                if ([self.suit isEqualToString:card.suit]) {
+                    score += 1;
+                }
+                else
+                    if (self.rank == card.rank) {
+                        score += 4;
+                }
             }
         }
     }
